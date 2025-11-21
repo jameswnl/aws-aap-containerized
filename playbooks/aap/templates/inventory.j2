@@ -84,12 +84,6 @@ controller_postinstall=false
 # controller_license_file=/tmp/manifest.zip
 controller_postinstall_dir=/tmp/config
 
-# Container Images (with SHA256 digests for exact versions)
-controller_image=automation-controller-container-26-next@sha256:3fe97c61fbb593778074edc57e383b449b1634bc806b1ff4479b41d0e43070b4
-gateway_image=automation-gateway-container-26-next@sha256:ea200d4b459c40e48de218bc8e9cd036c8819bf948db2c09906820f746c9d99e
-gateway_proxy_image=automation-gateway-proxy-container-26-next@sha256:c2eb832f675c9ea393b5155f696528340e9397bd8092b7e392a7c9837728fc5b
-receptor_image=receptor-container-26-next@sha256:28770a034e16bf551746a21d5a5fcd8eed60ea8250bbf5e5fdfd9a07a23bc86a
-
 {% if aap_include_eda_controller|bool %}
 # AAP EDA Controller - mandatory
 eda_admin_password={{ installer_admin_pw }}
