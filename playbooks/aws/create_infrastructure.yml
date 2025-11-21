@@ -177,7 +177,7 @@
           Public IP: {{ public_ip }}
           Private IP: {{ private_ip }}
           Public DNS: {{ public_dns }}
-          Key Path: {{ key_path }}
+          Key Path: <your_local_path>/{{ owner }}/{{ instance_name }}-key.pem
           Installer FQDN: {{ installer_fqdn_hostname }}
         dest: "{{ instance_info_path }}"
         mode: '0644'

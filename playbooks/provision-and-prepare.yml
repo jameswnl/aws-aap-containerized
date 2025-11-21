@@ -8,8 +8,10 @@
   hosts: aap_nodes
   become: true
   gather_facts: true
+  vars:
+    project_root: "{{ playbook_dir | dirname }}"
   vars_files:
-    - "{{ project_root | default(playbook_dir + '/..') }}/extra-vars.yml"
+    - "{{ project_root }}/extra-vars.yml"
 
   tasks:
     - name: Show preparation starting
@@ -24,21 +26,15 @@
       ansible.builtin.import_tasks: aap/tasks/pre-install.yml
 
   post_tasks:
-    - name: Save installation commands to local file
-      ansible.builtin.copy:
-        content: |
+    - name: Append installation instructions to instance info file
+      ansible.builtin.blockinfile:
+        path: "{{ project_root }}/files/{{ lookup('env', 'OWNER') }}/{{ lookup('env', 'INSTANCE_NAME') }}-info.txt"
+        marker: "# {mark} INSTALLATION INSTRUCTIONS"
+        block: |
+
           ========================================================
           AAP INSTALLATION PREPARATION COMPLETE
           ========================================================
-
-          Instance Details:
-          -----------------
-          Instance Name: {{ lookup('env', 'INSTANCE_NAME') }}
-          Owner: {{ lookup('env', 'OWNER') }}
-          Public IP: {{ ansible_host }}
-          Private IP: {{ ansible_default_ipv4.address }}
-          SSH Key: {{ ansible_ssh_private_key_file }}
-          Installer FQDN: {{ installer_fqdn_hostname }}
 
           Preparation Summary:
           --------------------
@@ -55,7 +51,7 @@
 
           SSH to instance and run installer:
           ----------------------------------
-          ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ ansible_host }}
+          ssh -i <your_local_path>/{{ lookup('env', 'OWNER') }}/{{ lookup('env', 'INSTANCE_NAME') }}-key.pem {{ ansible_user }}@{{ ansible_host }}
 
           # Once logged in, run:
           cd {{ installer_directory }}
@@ -76,8 +72,6 @@
           Password: {{ installer_admin_pw }}
 
           ========================================================
-        dest: "{{ playbook_dir | dirname }}/files/{{ lookup('env', 'OWNER') }}/installation-commands.txt"
-        mode: '0644'
       delegate_to: localhost
       become: false
 
@@ -90,7 +84,7 @@
           - ""
           - "Instance Details:"
           - "   Public IP: {{ ansible_host }}"
-          - "   SSH: ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ ansible_host }}"
+          - "   SSH: ssh -i <your_local_path>/{{ lookup('env', 'OWNER') }}/{{ lookup('env', 'INSTANCE_NAME') }}-key.pem {{ ansible_user }}@{{ ansible_host }}"
           - ""
           - "Preparation Summary:"
           - "   ✓ System packages updated"
@@ -100,15 +94,15 @@
           - "   ✓ AAP setup bundle extracted"
           - "   ✓ Installer inventory generated"
           - ""
-          - "Installation commands saved to:"
-          - "   files/{{ lookup('env', 'OWNER') }}/installation-commands.txt"
+          - "Installation instructions saved to:"
+          - "   files/{{ lookup('env', 'OWNER') }}/{{ lookup('env', 'INSTANCE_NAME') }}-info.txt"
           - ""
           - "Ready to Install AAP:"
           - "   To complete installation, run:"
           - "   ansible-playbook -i inventory/hosts.yml playbooks/aap/install.yml"
           - ""
           - "   Or SSH to the instance and run manually:"
-          - "   ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ ansible_host }}"
+          - "   ssh -i <your_local_path>/{{ lookup('env', 'OWNER') }}/{{ lookup('env', 'INSTANCE_NAME') }}-key.pem {{ ansible_user }}@{{ ansible_host }}"
           - "   cd {{ installer_directory }}"
           - "   ansible-playbook -v -i inventory.custom -e @vars_extra.yml ansible.containerized_installer.install"
           - "========================================================"
