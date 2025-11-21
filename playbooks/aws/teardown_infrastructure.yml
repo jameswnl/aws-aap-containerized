@@ -119,6 +119,7 @@
       loop:
         - "{{ playbook_dir }}/../../files/{{ owner }}/{{ instance_name }}-key.pem"
         - "{{ playbook_dir }}/../../files/{{ owner }}/{{ instance_name }}-info.txt"
+        - "{{ playbook_dir }}/../../files/{{ owner }}/{{ instance_name }}-installation-complete.txt"
         - "{{ playbook_dir }}/../../inventory/hosts.yml"
       ignore_errors: true
 

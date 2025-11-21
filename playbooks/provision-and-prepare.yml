@@ -30,6 +30,7 @@
   post_tasks:
     - name: Set installation instructions content
       ansible.builtin.set_fact:
+        info_file_path: "{{ project_root }}/files/{{ owner }}/{{ instance_name }}-info.txt"
         info_file_marker: "INSTALLATION INSTRUCTIONS"
         info_file_content: |
 
