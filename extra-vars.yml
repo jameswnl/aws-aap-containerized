@@ -1,18 +1,15 @@
 ---
 ### AWS Infrastructure Variables
-aws_region: >-
-  {{ lookup('env', 'AWS_REGION') | default('us-east-1', true) }}
-aws_availability_zone: >-
-  {{ lookup('env', 'AWS_AZ') | default('us-east-1a', true) }}
+aws_region: "{{ lookup('env', 'AWS_REGION') | default('us-east-2', true) }}"
+aws_availability_zone: "{{ lookup('env', 'AWS_AZ') | default('us-east-2a', true) }}"
 instance_type: >-
   {{ lookup('env', 'AWS_INSTANCE_TYPE') | default('t3.xlarge', true) }}
 instance_name: >-
   {{ lookup('env', 'INSTANCE_NAME') | default('aap-containerized', true) }}
 volume_size: >-
   {{ lookup('env', 'AWS_VOLUME_SIZE') | default('40', true) }}
-# RHEL 9.4+ in us-east-1
-ami_id: >-
-  {{ lookup('env', 'AWS_AMI_ID') | default('ami-0d85f16af633ab171', true) }}
+# RHEL 9.7 in us-east-2 (updated 2025-11-05)
+ami_id: "{{ lookup('env', 'AWS_AMI_ID') | default('ami-035032ea878eca201', true) }}"
 
 # Network Settings
 vpc_cidr: >-
@@ -39,12 +36,12 @@ installer_admin_pw: >-
 installer_fqdn_hostname: >-
   {{ lookup('env', 'INSTALLER_FQDN_HOSTNAME') |
      default('aap.example.org', true) }}
-registry_username: >-
-  {{ lookup('env', 'INSTALLER_REGISTRY_USERNAME') |
-     default('YOUR_USERNAME', true) }}
-registry_password: >-
-  {{ lookup('env', 'INSTALLER_REGISTRY_PASSWORD') |
-     default('YOUR_PASSWORD', true) }}
+registry_url: "{{ lookup('env', 'INSTALLER_REGISTRY_URL') | default('registry.redhat.io', true) }}"
+registry_namespace: "{{ lookup('env', 'INSTALLER_REGISTRY_NAMESPACE') | default('ansible-automation-platform-26', true) }}"
+registry_namespace_tp: "{{ lookup('env', 'INSTALLER_REGISTRY_NAMESPACE_TP') | default('ansible-automation-platform-26', true) }}"
+registry_username: "{{ lookup('env', 'INSTALLER_REGISTRY_USERNAME') | default('', true) }}"
+registry_password: "{{ lookup('env', 'INSTALLER_REGISTRY_PASSWORD') | default('', true) }}"
+registry_verify: "{{ lookup('env', 'INSTALLER_REGISTRY_VERIFY') | default('true', true) | bool }}"
 
 # Local setup bundle (pre-downloaded)
 setup_bundle: >-

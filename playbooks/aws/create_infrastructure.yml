@@ -97,11 +97,10 @@
         key_name: "{{ instance_name }}-key"
         vpc_subnet_id: "{{ subnet.subnet.id }}"
         instance_type: "{{ instance_type }}"
-        network_interfaces:
-          - assign_public_ip: true
-            subnet_id: "{{ subnet.subnet.id }}"
-            groups:
-              - "{{ security_group.group_id }}"
+        security_groups:
+          - "{{ security_group.group_id }}"
+        network:
+          assign_public_ip: true
         image_id: "{{ ami_id }}"
         region: "{{ aws_region }}"
         tags: "{{ common_tags | combine({'Name': instance_name}) }}"

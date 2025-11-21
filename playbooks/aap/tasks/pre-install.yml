@@ -52,7 +52,7 @@
 - name: Find AAP setup bundle in files directory
   ansible.builtin.find:
     paths: "{{ playbook_dir }}/../../files"
-    patterns: "*ansible-automation-platform-containerized-setup-bundle*.tar.gz"
+    patterns: "*ansible-automation-platform-containerized-setup*.tar.gz"
     file_type: file
   delegate_to: localhost
   become: false
