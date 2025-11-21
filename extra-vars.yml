@@ -62,7 +62,7 @@ aap_include_lightspeed: >-
      default('false', true) | bool }}
 aap_include_mcp: >-
   {{ lookup('env', 'AAP_INCLUDE_MCP') |
-     default('true', true) | bool }}
+     default('false', true) | bool }}
 
 # Installation Options
 skip_system_update: >-
