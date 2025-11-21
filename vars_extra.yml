@@ -1,4 +1,10 @@
 ---
+# Registry configuration
+registry_url: quay.io/redhat-user-workloads
+registry_ns_aap: ansible-tenant/aap-26-next
+registry_ns_aap_tp: ansible-tenant/aap-26-next
+
+# Vendor container images
 _pcp_image: quay.io/redhat-user-workloads/ansible-pde-tenant/vendor-containers/rhel9-pcp:latest
 _postgresql_image: quay.io/redhat-user-workloads/ansible-pde-tenant/vendor-containers/rhel9-postgresql-15:latest
 _redis_image: quay.io/redhat-user-workloads/ansible-pde-tenant/vendor-containers/rhel9-redis-6:latest
