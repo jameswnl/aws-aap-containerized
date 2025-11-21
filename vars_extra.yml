@@ -1,0 +1,25 @@
+---
+_pcp_image: quay.io/redhat-user-workloads/ansible-pde-tenant/vendor-containers/rhel9-pcp:latest
+_postgresql_image: registry.redhat.io/rhel9/postgresql-15:9.7
+_redis_image: registry.redhat.io/rhel9/redis-7:9.7
+controller_image: automation-controller-container-26-next@sha256:3fe97c61fbb593778074edc57e383b449b1634bc806b1ff4479b41d0e43070b4
+de_supported_image: de-supported-rhel9-container-26-next@sha256:4b8856907b84ed5a466a723a0d0a050cfdb6debd6799104e6244a3b685c73ab9
+eda_image: automation-eda-controller-container-26-next@sha256:94b5416e05845d0ec85bfe450f43c5e072a8b30bfe911ddb805f84e30bc05631
+eda_web_image: automation-eda-controller-ui-container-26-next@sha256:88cc8f4b7ac507c5912a48203fc31ee334771504814bb52935eb122ca928b25c
+ee_minimal_image: ee-minimal-rhel9-container-26-next@sha256:f55a41fdb425481d6613b12e71b052b8e786c240b8b86adc755902881c900a6f
+ee_supported_image: ee-supported-rhel9-container-26-next@sha256:8a4e17e612debab22cd83f2bdfd73e2e6d8395248a81263c44cf508c7920ec00
+gateway_image: automation-gateway-container-26-next@sha256:ea200d4b459c40e48de218bc8e9cd036c8819bf948db2c09906820f746c9d99e
+gateway_proxy_image: automation-gateway-proxy-container-26-next@sha256:c2eb832f675c9ea393b5155f696528340e9397bd8092b7e392a7c9837728fc5b
+hub_image: automation-hub-container-26-next@sha256:3e4f911e1a4b4c9f4a5690288b15e2a59ecc8a02d667603c24547b229c85d67b
+hub_web_image: automation-hub-web-container-26-next@sha256:36e3e7906bd0474f4dd2c88e21fcbf0dbff5a65048096101f7d2b7eab73e07ee
+lightspeed_chatbot_image: ansible-lightspeed-chatbot-container-26-next@sha256:63452d5a14d86a526157eebde9c8becffd9b6f5e1530b664a7ffd888b88b2886
+lightspeed_image: ansible-lightspeed-container-26-next@sha256:b2cce85d31cad05d98200446f0e7e168eeefe2fc1e70a7832ded524d0aea2756
+mcp_image: aap-mcp-server-container-26-next@sha256:dbe2f90ef71ccd238e5873d5c516fc7bb4e1686fef266ed4a82adfc14275a462
+mcp_tools_image: ansible-mcp-tools-container-26-next@sha256:55b50ebd77c06e5bdbb3e7de6781ea04715eff0d75c18f4a596695cef52de629
+pcp_image: rhel9-pcp:latest
+postgresql_image: rhel9-postgresql-15:latest
+receptor_image: receptor-container-26-next@sha256:28770a034e16bf551746a21d5a5fcd8eed60ea8250bbf5e5fdfd9a07a23bc86a
+redis_image: rhel9-redis-6:latest
+redis_mode: cluster
+setup_monitoring: true
+

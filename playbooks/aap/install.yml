@@ -31,6 +31,7 @@
         set -o pipefail
         ANSIBLE_COLLECTIONS_PATH={{ installer_directory }}/collections \
         ansible-playbook -v -i inventory.custom \
+        -e @{{ installer_directory }}/vars_extra.yml \
         ansible.containerized_installer.install 2>&1 | tee aap_install.log
         exit_code=\${PIPESTATUS[0]}
         echo \"Installation completed with exit code: \$exit_code\"
