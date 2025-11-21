@@ -28,11 +28,10 @@
       ansible.builtin.import_tasks: aap/tasks/pre-install.yml
 
   post_tasks:
-    - name: Append installation instructions to instance info file
-      ansible.builtin.blockinfile:
-        path: "{{ project_root }}/files/{{ owner }}/{{ instance_name }}-info.txt"
-        marker: "# {mark} INSTALLATION INSTRUCTIONS"
-        block: |
+    - name: Set installation instructions content
+      ansible.builtin.set_fact:
+        info_file_marker: "INSTALLATION INSTRUCTIONS"
+        info_file_content: |
 
           ========================================================
           AAP INSTALLATION PREPARATION COMPLETE
@@ -74,8 +73,9 @@
           Password: {{ installer_admin_pw }}
 
           ========================================================
-      delegate_to: localhost
-      become: false
+
+    - name: Append installation instructions to instance info file
+      ansible.builtin.include_tasks: aap/tasks/append-to-info-file.yml
 
     - name: Display preparation completion message
       ansible.builtin.debug:

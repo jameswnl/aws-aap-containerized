@@ -1,0 +1,15 @@
+---
+# Reusable task to append content to instance info file
+# Required variables:
+#   - info_file_marker: The marker name for blockinfile (e.g., "INSTALLATION INSTRUCTIONS")
+#   - info_file_content: The content to append
+#   - owner: Owner name for file path
+#   - instance_name: Instance name for file path
+
+- name: Append content to instance info file
+  ansible.builtin.blockinfile:
+    path: "{{ project_root | default(playbook_dir + '/../..') }}/files/{{ owner }}/{{ instance_name }}-info.txt"
+    marker: "# {mark} {{ info_file_marker }}"
+    block: "{{ info_file_content }}"
+  delegate_to: localhost
+  become: false

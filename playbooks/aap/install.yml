@@ -76,6 +76,43 @@
       when: installation_result is defined and installation_result.rc == 0
 
   post_tasks:
+    - name: Set installation completion content
+      ansible.builtin.set_fact:
+        owner: "{{ lookup('env', 'OWNER') }}"
+        instance_name: "{{ lookup('env', 'INSTANCE_NAME') | default(lookup('env', 'OWNER'), true) }}"
+        info_file_marker: "INSTALLATION COMPLETE"
+        info_file_content: |
+
+          ========================================================
+          ANSIBLE AUTOMATION PLATFORM INSTALLATION COMPLETE!
+          ========================================================
+
+          Installation completed at: {{ ansible_date_time.iso8601 }}
+
+          Access Your AAP Instance:
+          -------------------------
+          Web Interface: https://{{ ansible_host }}
+          API Endpoint: https://{{ ansible_host }}/api/gateway/v1/
+
+          Login Credentials:
+          ------------------
+          Username: admin
+          Password: {{ installer_admin_pw }}
+
+          Next Steps:
+          -----------
+          1. Access the web interface
+          2. Change the default admin password
+          3. Upload subscription manifest (Administration -> Subscription)
+          4. Configure organizations, users, and projects
+
+          ========================================================
+      when: installation_result is defined and installation_result.rc == 0
+
+    - name: Append installation completion to instance info file
+      ansible.builtin.include_tasks: tasks/append-to-info-file.yml
+      when: installation_result is defined and installation_result.rc == 0
+
     - name: Display completion message
       ansible.builtin.debug:
         msg:
