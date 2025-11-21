@@ -6,6 +6,8 @@
     - "{{ project_root | default(playbook_dir + '/../..') }}/extra-vars.yml"
 
   vars:
+    owner: "{{ lookup('env', 'OWNER') }}"
+    instance_name: "{{ lookup('env', 'INSTANCE_NAME') | default(lookup('env', 'OWNER'), true) }}"
     files_dir: "{{ project_root | default(playbook_dir + '/../..') }}/files/{{ owner }}"
     key_path: "{{ project_root | default(playbook_dir + '/../..') }}/files/{{ owner }}/{{ instance_name }}-key.pem"
     instance_info_path: "{{ project_root | default(playbook_dir + '/../..') }}/files/{{ owner }}/{{ instance_name }}-info.txt"

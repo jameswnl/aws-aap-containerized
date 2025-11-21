@@ -5,6 +5,10 @@
   vars_files:
     - "{{ playbook_dir }}/../../extra-vars.yml"
 
+  vars:
+    owner: "{{ lookup('env', 'OWNER') }}"
+    instance_name: "{{ lookup('env', 'INSTANCE_NAME') | default(lookup('env', 'OWNER'), true) }}"
+
   tasks:
     - name: Get EC2 instance information
       amazon.aws.ec2_instance_info:
