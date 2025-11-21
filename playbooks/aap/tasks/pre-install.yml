@@ -54,12 +54,14 @@
     path: ~/.config/containers
     state: directory
     mode: '0755'
+  become: false
 
 - name: Copy quay registry authentication to remote host
   ansible.builtin.copy:
     src: "{{ playbook_dir }}/../../files/quay_nightly.json"
     dest: ~/.config/containers/auth.json
     mode: '0600'
+  become: false
 
 - name: Find AAP setup bundle in files directory
   ansible.builtin.find:
