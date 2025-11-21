@@ -4,8 +4,6 @@ aws_region: "{{ lookup('env', 'AWS_REGION') | default('us-east-2', true) }}"
 aws_availability_zone: "{{ lookup('env', 'AWS_AZ') | default('us-east-2a', true) }}"
 instance_type: >-
   {{ lookup('env', 'AWS_INSTANCE_TYPE') | default('t3.xlarge', true) }}
-instance_name: >-
-  {{ lookup('env', 'INSTANCE_NAME') | default('aap-containerized', true) }}
 volume_size: >-
   {{ lookup('env', 'AWS_VOLUME_SIZE') | default('40', true) }}
 # RHEL 9.7 in us-east-2 (updated 2025-11-05)
