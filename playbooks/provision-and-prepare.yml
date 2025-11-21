@@ -53,20 +53,11 @@
           INSTALLATION COMMANDS
           ========================================================
 
-          Option 1: Run installer from your local machine
-          ------------------------------------------------
-          cd {{ playbook_dir | dirname }}
-          OWNER={{ lookup('env', 'OWNER') }} INSTANCE_NAME={{ lookup('env', 'INSTANCE_NAME') }} \
-          INSTALLER_REGISTRY_URL="quay.io/redhat-user-workloads" \
-          INSTALLER_REGISTRY_NAMESPACE="ansible-tenant/aap-26-next" \
-          INSTALLER_REGISTRY_NAMESPACE_TP="ansible-tenant/aap-26-next" \
-          ansible-playbook -i inventory/hosts.yml playbooks/aap/install.yml
-
-          Option 2: SSH to instance and run manually
-          -------------------------------------------
+          SSH to instance and run installer:
+          ----------------------------------
           ssh -i {{ ansible_ssh_private_key_file }} {{ ansible_user }}@{{ ansible_host }}
 
-          # Once logged in:
+          # Once logged in, run:
           cd {{ installer_directory }}
           ANSIBLE_COLLECTIONS_PATH={{ installer_directory }}/collections \
           ansible-playbook -v -i inventory.custom \
