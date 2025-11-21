@@ -60,6 +60,9 @@ aap_include_automation_hub: >-
 aap_include_lightspeed: >-
   {{ lookup('env', 'AAP_INCLUDE_LIGHTSPEED') |
      default('false', true) | bool }}
+aap_include_mcp: >-
+  {{ lookup('env', 'AAP_INCLUDE_MCP') |
+     default('true', true) | bool }}
 
 # Installation Options
 skip_system_update: >-

@@ -28,6 +28,13 @@
 {{ installer_fqdn_hostname }} ansible_connection=local
 {% endif %}
 
+{% if aap_include_mcp|bool %}
+# This section is for your Ansible MCP Server host(s)
+# ------------------------------------------------------
+[ansiblemcp]
+{{ installer_fqdn_hostname }} ansible_connection=local
+{% endif %}
+
 # This section is for your AAP Gateway host(s)
 # -----------------------------------------------------
 [automationgateway]
@@ -82,12 +89,6 @@ controller_image=automation-controller-container-26-next@sha256:3fe97c61fbb59377
 gateway_image=automation-gateway-container-26-next@sha256:ea200d4b459c40e48de218bc8e9cd036c8819bf948db2c09906820f746c9d99e
 gateway_proxy_image=automation-gateway-proxy-container-26-next@sha256:c2eb832f675c9ea393b5155f696528340e9397bd8092b7e392a7c9837728fc5b
 receptor_image=receptor-container-26-next@sha256:28770a034e16bf551746a21d5a5fcd8eed60ea8250bbf5e5fdfd9a07a23bc86a
-# PostgreSQL and Redis - full paths from registry.redhat.io
-postgresql_image=registry.redhat.io/rhel9/postgresql-15:9.7
-redis_image=registry.redhat.io/rhel9/redis-7:9.7
-# Registry credentials for pulling postgres/redis from registry.redhat.io
-registry_username={{ lookup('env', 'RH_REGISTRY_ID') }}
-registry_password={{ lookup('env', 'RH_REGISTRY_PWD') }}
 
 {% if aap_include_eda_controller|bool %}
 # AAP EDA Controller - mandatory
