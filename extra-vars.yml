@@ -6,8 +6,18 @@ instance_type: >-
   {{ lookup('env', 'AWS_INSTANCE_TYPE') | default('t3.xlarge', true) }}
 volume_size: >-
   {{ lookup('env', 'AWS_VOLUME_SIZE') | default('40', true) }}
-# RHEL 9.7 in us-east-2 (updated 2025-11-05)
-ami_id: "{{ lookup('env', 'AWS_AMI_ID') | default('ami-035032ea878eca201', true) }}"
+
+# RHEL Version Selection (9 or 10)
+rhel_version: >-
+  {{ lookup('env', 'RHEL_VERSION') | default('9', true) }}
+
+# AMI IDs for different RHEL versions in us-east-2
+rhel_amis:
+  "9": "ami-035032ea878eca201"  # RHEL 9.7 (updated 2025-11-05)
+  "10": "ami-0dbc8afa42dccb430"  # RHEL 10.1.0 (updated 2025-11-05)
+
+# Select AMI based on version or use custom AMI_ID
+ami_id: "{{ lookup('env', 'AWS_AMI_ID') | default(rhel_amis[rhel_version], true) }}"
 
 # Network Settings
 vpc_cidr: >-
