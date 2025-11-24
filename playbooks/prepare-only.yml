@@ -1,0 +1,121 @@
+---
+# Prepare existing EC2 instance for AAP Installation (Pre-install only)
+# Usage: ansible-playbook -i <inventory_file> playbooks/prepare-only.yml
+#
+# Your inventory file should look like:
+# ---
+# all:
+#   children:
+#     aap_nodes:
+#       hosts:
+#         aap_controller:
+#           ansible_host: <your-instance-ip>
+#           ansible_user: ec2-user
+#           ansible_ssh_private_key_file: <path-to-your-key.pem>
+#           ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'
+
+- name: Prepare AAP Installation (Pre-install only)
+  hosts: aap_nodes
+  become: true
+  gather_facts: true
+  vars:
+    project_root: "{{ playbook_dir | dirname }}"
+    owner: "{{ lookup('env', 'OWNER') }}"
+    instance_name: "{{ lookup('env', 'INSTANCE_NAME') | default(lookup('env', 'OWNER'), true) }}"
+  vars_files:
+    - "{{ project_root }}/extra-vars.yml"
+
+  tasks:
+    - name: Show preparation starting
+      ansible.builtin.debug:
+        msg: |
+          Preparing AAP Installation on {{ inventory_hostname }}
+          Target: {{ installer_fqdn_hostname }}
+          Components: Controller={{ aap_include_controller }}, EDA={{ aap_include_eda_controller }}, Hub={{ aap_include_automation_hub }}, MCP={{ aap_include_mcp }}
+
+    # Import all pre-installation tasks
+    - name: Import pre-installation tasks
+      ansible.builtin.import_tasks: aap/tasks/pre-install.yml
+
+  post_tasks:
+    - name: Set installation instructions content
+      ansible.builtin.set_fact:
+        info_file_path: "{{ project_root }}/files/{{ owner }}/{{ instance_name }}-info.txt"
+        info_file_marker: "INSTALLATION INSTRUCTIONS"
+        info_file_content: |
+
+          ========================================================
+          AAP INSTALLATION PREPARATION COMPLETE
+          ========================================================
+
+          Preparation Summary:
+          --------------------
+          ✓ System packages updated
+          ✓ Required packages installed
+          ✓ Hostname configured: {{ installer_fqdn_hostname }}
+          ✓ Quay registry authentication configured
+          ✓ AAP setup bundle extracted
+          ✓ Installer inventory generated
+
+          ========================================================
+          INSTALLATION COMMANDS
+          ========================================================
+
+          SSH to instance and run installer:
+          ----------------------------------
+          ssh -i <your-key-path> {{ ansible_user }}@{{ ansible_host }}
+
+          # Once logged in, run:
+          cd {{ installer_directory }}
+          ANSIBLE_COLLECTIONS_PATH={{ installer_directory }}/collections \
+          ansible-playbook -v -i inventory.custom \
+          -e @{{ installer_directory }}/vars_extra.yml \
+          ansible.containerized_installer.install
+
+          ========================================================
+          ACCESS INFORMATION (after installation completes)
+          ========================================================
+
+          Web Interface: https://{{ ansible_host }}
+          API Endpoint: https://{{ ansible_host }}/api/gateway/v1/
+
+          Login Credentials:
+          Username: admin
+          Password: {{ installer_admin_pw }}
+
+          ========================================================
+
+    - name: Append installation instructions to instance info file
+      ansible.builtin.include_tasks: aap/tasks/append-to-info-file.yml
+
+    - name: Display preparation completion message
+      ansible.builtin.debug:
+        msg:
+          - "========================================================"
+          - "AAP INSTALLATION PREPARATION COMPLETE!"
+          - "========================================================"
+          - ""
+          - "Instance Details:"
+          - "   Public IP: {{ ansible_host }}"
+          - "   SSH: ssh -i <your-key-path> {{ ansible_user }}@{{ ansible_host }}"
+          - ""
+          - "Preparation Summary:"
+          - "   ✓ System packages updated"
+          - "   ✓ Required packages installed"
+          - "   ✓ Hostname configured: {{ installer_fqdn_hostname }}"
+          - "   ✓ Quay registry authentication configured"
+          - "   ✓ AAP setup bundle extracted"
+          - "   ✓ Installer inventory generated"
+          - ""
+          - "Installation instructions saved to:"
+          - "   files/{{ owner }}/{{ instance_name }}-info.txt"
+          - ""
+          - "Ready to Install AAP:"
+          - "   To complete installation, run:"
+          - "   ansible-playbook -i <your-inventory> playbooks/aap/install.yml"
+          - ""
+          - "   Or SSH to the instance and run manually:"
+          - "   ssh -i <your-key-path> {{ ansible_user }}@{{ ansible_host }}"
+          - "   cd {{ installer_directory }}"
+          - "   ansible-playbook -v -i inventory.custom -e @vars_extra.yml ansible.containerized_installer.install"
+          - "========================================================"

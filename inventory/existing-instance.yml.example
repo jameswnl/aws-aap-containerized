@@ -1,0 +1,16 @@
+---
+# Example inventory for existing EC2 instance
+# Copy this file and customize for your instance:
+#   cp inventory/existing-instance.yml.example inventory/my-instance.yml
+#   # Edit my-instance.yml with your instance details
+#   ansible-playbook -i inventory/my-instance.yml playbooks/prepare-only.yml
+
+all:
+  children:
+    aap_nodes:
+      hosts:
+        aap_controller:
+          ansible_host: <YOUR_INSTANCE_IP>           # Replace with your EC2 instance public IP
+          ansible_user: ec2-user                      # Use ec2-user for RHEL instances
+          ansible_ssh_private_key_file: <PATH_TO_YOUR_KEY>  # Replace with path to your SSH key
+          ansible_ssh_common_args: '-o StrictHostKeyChecking=no -o IdentitiesOnly=yes'
